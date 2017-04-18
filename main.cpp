@@ -64,8 +64,9 @@ int main(){
         }
         else if (choice == 7)
             cout<<"exiting"<<endl;
-        else
+        else{
             cout<<"out of bounds"<<endl;
+	}
     }
 
      tree.~BinarySearchTree();

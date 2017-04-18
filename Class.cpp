@@ -109,7 +109,7 @@ void BinarySearchTree::save_file(string name){
 void BinarySearchTree::fileprintHelper(Node *current, ofstream& out){
     if(current != NULL) {
         printHelper(current->left);
-        out << current->key << " ";
+        out << current->key << endl;
         printHelper(current->right);
     }
 };
