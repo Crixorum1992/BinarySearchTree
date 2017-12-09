@@ -1,25 +1,31 @@
-#Name:Nicholas Reid
-#Date:04/17/2017
-#Program:Makefile
-#Description: makes BinarySearchTree database with g++ compiler
 
+# Compiler Version
 CC=g++
-TARGET=BinarySearchTree
-CFLAGS=-c -Wall
+
+# Debugging flag -g
+DEBUG=-g
+
+# Target
+TARGET=Class
+
+# Compile with all errors and warnings
+CFLAGS=-c -Wall $(DEBUG)
+
+# Makefile syntax:
+# target: dependencies
+#(tab) system command(s)
 
 all: $(TARGET)
 
-# Creates Database useing target variable and nessecary output files
 $(TARGET): main.o Class.o
 	$(CC) main.o Class.o -o $(TARGET)
 
-# Creates main and rational output files
-main.o: main.cpp
+main.o: main.cpp Class.h
 	$(CC) $(CFLAGS) main.cpp
-	
-rational.o: Class.cpp
+
+list.o: Class.cpp Class.h
 	$(CC) $(CFLAGS) Class.cpp
 
-# Cleans by removing output emac and target files	
 clean:
 	rm *.o *~ $(TARGET)
+

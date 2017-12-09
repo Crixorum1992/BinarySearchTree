@@ -1,165 +1,251 @@
-//Name:
-//Date:
-//Program:
-//Description:
+//Name: Nicholas Reid
+//Date: 12/8/2017
+//Program: Class.cpp
+//Description: driver functions for program
 
 #include "Class.h"
 
 Node::Node(string key){
-    left=NULL;
-    right=NULL;
+    this->key = key;
+    data = 0;
+    right = NULL;
+    left = NULL;
 }
 
+void Node::setData(int num){
+    data = num;
+}
 
-BinarySearchTree::BinarySearchTree(){
+int Node::Data(){
+    return data;
+}
+
+void Node::setKey(string key){
+    this->key == key;
+}
+
+string Node::Key(){
+    return key;
+}
+
+void Node::setLeft(Node* current){
+    left = current;
+}
+
+/*Node* Left(){
+    return left;
+}*/
+
+void Node::setRight(Node* current){
+    right = current;
+}
+
+/*Node* Right(){
+    return right;
+}*/
+
+
+associativeArray::associativeArray(){
     root = NULL;
 };
 
-BinarySearchTree::~BinarySearchTree(){
+associativeArray::~associativeArray(){
     destructorHelper(root);
 };
 
-void BinarySearchTree::destructorHelper(Node *current) {
+void associativeArray::destructorHelper(Node *current) {
   if(current != NULL) {
-    destructorHelper(current->left);
-    destructorHelper(current->right);
+    destructorHelper(current->Left());
+    destructorHelper(current->Right());
     delete current;
   }
 }
 
-void BinarySearchTree::setNode(string key, int data){
+void associativeArray::setNode(string key, int data){
     if(root == NULL){
         root = new Node(key);
-        root->key = key;
-        root->data = data;
+        root->setData(data);
+        //root->setKey(key);
     }
     else
         insertHelper(root, key, data);
 };
 
-void BinarySearchTree::insertHelper(Node *current, string key, int value) {
-    if(value < current->data) {
-    //Insert Left
-        if(current->left == NULL){
-            current->left = new Node(key);
-            current->left->key = key;
-            current->left->data = value;
-        }
-        else
-            insertHelper(current->left, key, value);
-    }
-    else {
-    //Insert Right
-        if(current->right == NULL){
-            current->right = new Node(key);
-            current->right->key = key;
-            current->right->data = value;
-        }
-        else
-            insertHelper(current->right, key, value);
+void associativeArray::insertHelper(Node *current, string key, int value) {
+    if(value == current->Data()){
+        current->setData(value);
     }
 
+    else if(value < current->Data()){ //Insert Left
+        if(current->Left() == NULL){
+            current->setLeft(new Node(key));
+            current->Left()->setData(value);
+            //current->Left()->setKey(key);
+        }
+        else
+            insertHelper(current->Left(), key, value);
+        }
+
+    else if(value > current->Data()){ //Insert Right
+        if(current->Right() == NULL){
+            current->setRight(new Node(key));
+            current->Right()->setData(value);
+            //current->Right()->setKey(key);
+        }
+        else
+            insertHelper(current->Right(), key, value);
+        }
+
+    else{
+        cout << "Failed.. Returning" << endl;
+        return;
+    }
 }
 
-void BinarySearchTree::print(){
-    printHelper(root);
-    cout << endl;
+void associativeArray::find(string key){
+    findHelper(root, key);
+}
+
+void associativeArray::findHelper(Node *current, string key){
+    while(current != NULL){
+        if(current->Key() == key)
+            cout<<current->Data()<<endl;
+        else if(current -> Key() < key)
+            findHelper(current -> Right(), key);
+        else if(current -> Key() > key)
+            findHelper(current -> Left(), key);
+    }
 };
 
-void BinarySearchTree::printHelper(Node *current) {
+void associativeArray::print(){
+    printHelper(root);
+};
+
+void associativeArray::printHelper(Node *current) {
     // In-order traversal.
     if(current != NULL) {
-        printHelper(current->left);
-        cout << current->key << " ";
-        printHelper(current->right);
+        printHelper(current->Left());
+        cout << current -> Key() << " ";
+        printHelper(current->Right());
     }
 }
 
-void BinarySearchTree::minNode(){
+void associativeArray::minNode(){
     Node *current;
     current = root;
     if (current != NULL){
-        current = current->left;
+        current = current->Left();
     }
-    cout<<current->key<<endl;
+    cout<<current->Key()<<endl;
 };
 
-void BinarySearchTree::maxNode(){
+void associativeArray::maxNode(){
     Node *current;
     current = root;
     if (current != NULL){
-        current = current->right;
+        current = current->Right();
     }
-    cout<<current->key<<endl;
+    cout<<current->Key()<<endl;
 };
 
-void BinarySearchTree::save_file(string name){
+void associativeArray::save_file(string name){
     ofstream outfile;
     outfile.open(name.c_str());
     if (outfile.fail()){
 		cout<<"cout unable to open file";
 	}
 
-	fileprintHelper(root, outfile);
+	saveHelper(root, outfile);
 
 	outfile.close();
 
 };
 
-void BinarySearchTree::fileprintHelper(Node *current, ofstream& out){
+void associativeArray::saveHelper(Node *current, ofstream& out){
     if(current != NULL) {
-        printHelper(current->left);
-        out << current->key << endl;
-        printHelper(current->right);
+        saveHelper(current->Left(),out);
+        out << current -> Key() << " - " << current -> Data();
+        saveHelper(current->Right(),out);
     }
 };
 
-void BinarySearchTree::deleteNode(int data){
-    deleteHelper(root, data);
+void associativeArray::deleteNode(string key){
+    deleteHelper(root, key);
 };
 
-void BinarySearchTree::deleteHelper(Node* &current, int data){
-    //Node doesn't exist
-    if(current == NULL)
+void associativeArray::deleteHelper(Node* parent, string key){
+    if(parent == NULL)
         return;
-    //Go left
-    else if(data < current->data)
-        deleteHelper(current->left, data);
-    //Go right
-    else if(current->data < data)
-        deleteHelper(current->right, data);
-    //No children
-    else {
-        Node *temp;
 
-    if(current->left == NULL) {
-        temp = current->right;
-        delete current;
-        current = temp;
+    while(parent -> Left() -> Key() != key && parent -> Right() -> Key() != key){
+        if(key < parent -> Key()) //Go Left
+            deleteHelper(parent -> Left(), key);
+        if(key > parent -> Key()) //Go Right
+            deleteHelper(parent -> Right(), key);
     }
-    else if(current->right == NULL) {
-        temp = current->left;
-        delete current;
-        current = temp;
-    }
-    //2 children
-    else {
-        temp = current->right;
-        Node *parent = NULL;
 
-        while(temp->left != NULL) {
-            parent = temp;
-            temp = temp->left;
+
+    if(parent -> Right() -> Key() == key) //Key Found right
+    {
+        Node* c1 = parent -> Right();
+        if(c1 -> Right() == NULL && c1 -> Left() == NULL) //Node is Leaf
+        {
+            parent -> setRight(NULL);
+            delete c1;
         }
 
-        current->data = temp->data;
+    else if(c1 -> Right() == NULL && c1 -> Left() != NULL) //Left Tree exists
+    {
+        parent -> setRight(c1 -> Left());
+        delete c1;
+    }
 
-        if(parent != NULL)
-            deleteHelper(parent->left, parent->left->data);
-        else
-            deleteHelper(current->right, current->right->data);
+    else if(c1 -> Right() != NULL && c1 -> Left() == NULL) //Right tree exists
+    {
+        parent -> setRight(c1 -> Right());
+        delete c1;
+    }
 
-        }//else
-    }//else
-};
+    else //Both Trees exist
+    {
+        Node* child = c1 -> Left();
+        while(child->Key() < child->Right()->Key() && child->Right() != NULL)
+        child = child->Right();
+        c1 -> setKey(child->Key());
+        c1 -> setData(child->Data());
+        delete child;
+    }
+    }
+
+    else if(parent -> Left() -> Key() == key) //Key found left
+    {
+        Node* c1 = parent -> Left();
+    if(c1 -> Right() == NULL && c1 -> Left() == NULL) //Node is Leaf
+    {
+        parent -> setLeft(NULL);
+        delete c1;
+    }
+    else if(c1 -> Right() == NULL && c1 -> Left() != NULL) //Left Tree exists
+    {
+        parent -> setLeft(c1 -> Left());
+        delete c1;
+    }
+
+    else if(c1 -> Right() != NULL && c1 -> Left() == NULL) //Right tree exists
+    {
+        parent -> setLeft(c1 -> Right());
+        delete c1;
+    }
+
+    else //Both Trees exist
+    {
+        Node* child = c1 -> Left();
+        while(child->Key() < child->Right()->Key() && child->Right() != NULL)
+        child = child->Right();
+        c1 -> setKey(child->Key());
+        c1 -> setData(child->Data());
+        delete child;
+    }
+}
+}
 

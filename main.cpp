@@ -1,18 +1,18 @@
 //Name: Nicholas Reid
-//Date: 04/17/2017
-//program: main.cpp
-//Description: Binary Search Tree
+//Date: 12/8/2017
+//Program: main.cpp
+//Description: main driver for the program
 
 #include "Class.h"
 
-int main(){
+main(){
     string key;
     int value;
     string name;
     int choice;
-    BinarySearchTree tree;
+    associativeArray tree;
 
-    BinarySearchTree();
+    associativeArray();
 
     cout<<"welcome to binary search tree"<<endl;
     cout<<"1. set"<<endl;
@@ -21,23 +21,23 @@ int main(){
     cout<<"4. max"<<endl;
     cout<<"5. save"<<endl;
     cout<<"6. delete"<<endl;
-    cout<<"7. exit"<<endl;
+    cout<<"7. find"<<endl;
+    cout<<"8. exit"<<endl;
 
-    while (choice != 7){
+    while (choice != 8){
         cout<<"how do you want to proceed"<<endl;
         cin>>choice;
         if(choice == 1){
                 cout<<"Key"<<endl;
                 cin>>key;
-                cout<<endl;
                 cout<<"Value"<<endl;
                 cin>>value;
-                cout<<endl;
                 tree.setNode(key, value);
                 cout<<"setting"<<endl;
         }
         else if (choice == 2){
             tree.print();
+            cout<<endl;
             cout<<"printing"<<endl;
         }
         else if (choice == 3){
@@ -55,19 +55,24 @@ int main(){
             cout<<"saving"<<endl;
         }
         else if (choice == 6){
-            cout<<"Value"<<endl;
-            cin>>value;
             cout<<"Key"<<endl;
             cin>>key;
-            tree.deleteNode(value);
+            tree.deleteNode(key);
             cout<<"deleting"<<endl;
         }
-        else if (choice == 7)
+        else if (choice == 7){
+            cout<<"key"<<endl;
+            cin>>key;
+            tree.find(key);
+        }
+        else if (choice == 8)
             cout<<"exiting"<<endl;
         else{
             cout<<"out of bounds"<<endl;
-	}
+            cin.clear();
+            cin.ignore(1,' ');
+        }
     }
 
-     tree.~BinarySearchTree();
+     //tree.~associativeArray();
 }
